@@ -1,7 +1,12 @@
 import ProductCard from "./ProductCard";
 import "./App.css";
+import { BrowserRouter, Routes, Route ,Link} from "react-router-dom";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
 import products from "./data";
 import { useState, useEffect } from "react";
+import Signin  from "./pages/Signin";
+import SignUp from "./pages/SignUp";
 
 function App() {
   // ── State ──────────────────────────────────────────────
@@ -139,6 +144,7 @@ function App() {
   }
 
   return (
+    <BrowserRouter>
     <div className="app" data-theme={darkMode ? "dark" : "light"}>
       {/* ── Toast Notification ────────────────────────── */}
       {toast && (
@@ -180,9 +186,9 @@ function App() {
 
           <ul className="nav-links">
             <li>
-              <a href="#products" className="nav-link">
-                Products
-              </a>
+              <Link to="/products" className="nav-link">
+                  Products
+              </Link>
             </li>
             <li>
               <a href="#" className="nav-link">
@@ -193,6 +199,11 @@ function App() {
               <a href="#" className="nav-link">
                 Support
               </a>
+              </li>
+            <li>
+              <Link to="/Signin" className="nav-link">
+                  SignIn 
+              </Link>
             </li>
           </ul>
 
@@ -240,129 +251,36 @@ function App() {
         </div>
       </nav>
 
-      {/* ── Hero Section ──────────────────────────────── */}
-      <section className="hero">
-        <div className="hero-content">
-          <p className="hero-tag">New Arrivals 2025</p>
-          <h1 className="hero-title">
-            Your World Of Tech
-            <br />
-            <span className="hero-highlight">One Click Away.</span>
-          </h1>
-          <p className="hero-description">
-            Explore the world of modern technology, all in one place. From
-            powerful laptops and smart devices to the latest smartphones,
-            discover products that fit the way you live, work, and create.
-          </p>
-          <div className="hero-cta">
-            <button className="btn-primary" onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}>
-              Explore Products
-            </button>
-            <button className="btn-secondary">Learn More</button>
-          </div>
-        </div>
-        <div className="hero-stats">
-          <div className="stat">
-            <span className="stat-number">50K+</span>
-            <span className="stat-label">Happy Customers</span>
-          </div>
-          <div className="stat">
-            <span className="stat-number">200+</span>
-            <span className="stat-label">Premium Products</span>
-          </div>
-          <div className="stat">
-            <span className="stat-number">24/7</span>
-            <span className="stat-label">Customer Support</span>
-          </div>
-        </div>
-      </section>
+      <Routes>
 
-      {/* ── Products Section ──────────────────────────── */}
-      <section className="products-section" id="products">
-        <div className="section-header">
-          <h2 className="section-title">Best Sellers</h2>
-          <p className="section-subtitle">
-            Our most popular products loved by customers
-          </p>
-        </div>
+        <Route path="/" element={<Home />} />
 
-        {/* Filter & Sort Bar */}
-        <div className="filter-bar">
-          <div className="filter-group">
-            <label className="filter-label" htmlFor="brand-filter">Brand</label>
-            <select
-              className="filter-select"
-              id="brand-filter"
-              value={selectedBrand}
-              onChange={(e) => setSelectedBrand(e.target.value)}
-            >
-              <option value="All">All Brands</option>
-              {allBrands.map((brand) => (
-                <option key={brand} value={brand}>
-                  {brand}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="filter-group">
-            <label className="filter-label" htmlFor="sort-select">Sort By</label>
-            <select
-              className="filter-select"
-              id="sort-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="">Default</option>
-              <option value="price-low">Price: Low → High</option>
-              <option value="price-high">Price: High → Low</option>
-              <option value="rating">Top Rated</option>
-            </select>
-          </div>
-
-          <span className="results-count">
-            {filteredProducts.length} product{filteredProducts.length !== 1 ? "s" : ""} found
-          </span>
-        </div>
-
-        {/* Product Grid */}
-        <div className="product-grid">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((data) => (
-              <ProductCard
-                key={data.id}
-                id={data.id}
-                image={data.image}
-                name={data.name}
-                price={data.price}
-                originalPrice={data.originalPrice}
-                discount={data.discount}
-                rating={data.rating}
-                isBestSeller={data.isBestSeller}
-                isWishlisted={wishlist.includes(data.id)}
-                onAddToCart={() => addToCart(data)}
-                onToggleWishlist={() => toggleWishlist(data.id)}
+         <Route
+            path="/products"
+            element={
+              <Products
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                selectedBrand={selectedBrand}
+                setSelectedBrand={setSelectedBrand}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                filteredProducts={filteredProducts}
+                allBrands={allBrands}
+                wishlist={wishlist}
+                addToCart={addToCart}
+                toggleWishlist={toggleWishlist}
               />
-            ))
-          ) : (
-            <div className="no-results">
-              <span className="no-results-icon">🔍</span>
-              <h3>No products found</h3>
-              <p>Try adjusting your search or filter criteria</p>
-              <button
-                className="btn-secondary"
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedBrand("All");
-                  setSortBy("");
-                }}
-              >
-                Clear Filters
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
+            }
+          />
+          <Route path="/Signin" element={<Signin showToast={showToast}/>} />
+          <Route path="/signup" element={<SignUp showToast={showToast} />}
+/>
+
+
+      </Routes>
+
+     
 
       {/* ── Footer ────────────────────────────────────── */}
       <footer className="footer">
@@ -464,6 +382,7 @@ function App() {
         </div>
       </div>
     </div>
+    </BrowserRouter>
   );
 }
 

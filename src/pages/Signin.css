@@ -1,0 +1,153 @@
+/* =========================
+   SIGN IN PAGE
+========================= */
+
+.signin-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background: #f5f7fb;
+}
+
+/* Sign in box */
+
+.signin-page form {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Heading */
+
+.signin-page h1 {
+  margin-bottom: 28px;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Input container */
+
+.signin-page form > div {
+  margin-bottom: 20px;
+}
+
+/* Labels */
+
+.signin-page label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Inputs */
+
+.signin-page input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* When user clicks inside input */
+
+.signin-page input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* Sign In button */
+
+.signin-page button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #9945e7;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.signin-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.signin-card {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.signin-card h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.signin-card form {
+  padding: 40px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+/* Hover */
+
+.signin-page button:hover {
+  background: #9228d8;
+  transform: translateY(-1px);
+}
+.signin-card input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  outline: none;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  transition: 0.25s ease;
+}
+
+/* When you click inside the input */
+.signin-card input:focus {
+  border-color: #7c6ee6;
+  box-shadow: 0 0 0 4px rgba(124, 110, 230, 0.15);
+}
+.signin-card input:hover {
+  border-color: #a49be8;
+}
+/* Mobile */
+
+@media (max-width: 500px) {
+  .signin-page {
+    padding: 20px;
+  }
+
+  .signin-page form {
+    padding: 28px 22px;
+  }
+
+  .signin-page h1 {
+    font-size: 28px;
+  }
+}
