@@ -3,12 +3,66 @@ import "./App.css";
 import { BrowserRouter, Routes, Route ,Link} from "react-router-dom";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
-import products from "./data";
+import OrderSuccess from "./pages/OrderSuccess";
+import productData from "./data";
+import Checkout from "./pages/Checkout";
+import MyOrders from "./pages/MyOrders";
 import { useState, useEffect } from "react";
 import Signin  from "./pages/Signin";
 import SignUp from "./pages/SignUp";
+console.log("Total products:", productData.length);
 
 function App() {
+  function handleLogout() {
+  localStorage.removeItem("techStrix-user");
+  setLoggedInUser(null);
+  showToast("Logged out successfully!");
+}
+async function uploadProducts() {
+
+  const productsForBackend = productData.map(product => ({
+    name: product.name,
+    price: product.price,
+    rating: product.rating,
+    discount: product.discount,
+    brand: product.brand,
+    image: product.image,
+    isBestSeller: product.isBestSeller
+  }));
+
+  console.log("Total products:", productData.length);
+  console.log("Sending:", productsForBackend.length);
+  console.log("First product:", productsForBackend[0]);
+
+  const response = await fetch(
+    "http://localhost:8080/api/products/bulk",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(productsForBackend)
+    }
+  );
+
+  const data = await response.json();
+
+  console.log("Saved:", data);
+}
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+  fetch("http://localhost:8080/api/products")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("BACKEND PRODUCTS:", data);
+      console.log("BACKEND COUNT:", data.length);
+      setProducts(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+    });
+}, []);
+
   // ── State ──────────────────────────────────────────────
   const [cartItems, setCartItems] = useState(()=>{
     const savedCart=localStorage.getItem("techStrix-cart")
@@ -65,6 +119,19 @@ function App() {
     (total, item) => total + item.price * item.quantity,
     0
   );
+  const [loggedInUser, setLoggedInUser] = useState(() => {
+  const savedUser = localStorage.getItem("techStrix-user");
+
+  if (savedUser) {
+    try {
+      return JSON.parse(savedUser);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  return null;
+});
 
   const allBrands = [...new Set(products.map((p) => p.brand))];
 
@@ -161,6 +228,7 @@ function App() {
             <span className="logo-icon"></span>
             ⚡TechStrix
           </a>
+        
 
           {/* Search Bar */}
           <div className="nav-search">
@@ -190,21 +258,33 @@ function App() {
                   Products
               </Link>
             </li>
+            
+           
             <li>
-              <a href="#" className="nav-link">
-                Deals
-              </a>
+               {loggedInUser ? (
+    <div className="user-menu">
+      <span className="welcome-user">
+        Hi, {loggedInUser.name} 👋
+      </span>
+
+      <button
+        className="logout-btn"
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
+    </div>
+  ) : (
+    <Link to="/Signin" className="nav-link">
+      Sign In
+    </Link>
+  )}
             </li>
             <li>
-              <a href="#" className="nav-link">
-                Support
-              </a>
-              </li>
-            <li>
-              <Link to="/Signin" className="nav-link">
-                  SignIn 
-              </Link>
-            </li>
+  <Link to="/my-orders" className="nav-link">
+    My Orders
+  </Link>
+</li>
           </ul>
 
           <div className="nav-actions">
@@ -246,7 +326,9 @@ function App() {
               </span>
             )}
 
-            <button className="nav-btn primary">Shop Now</button>
+            <Link to="/products" className="nav-btn primary">
+  Shop Now
+</Link>
           </div>
         </div>
       </nav>
@@ -274,7 +356,19 @@ function App() {
             }
           />
           <Route path="/Signin" element={<Signin showToast={showToast}/>} />
-          <Route path="/signup" element={<SignUp showToast={showToast} />}
+          <Route path="/signup" element={<SignUp showToast={showToast} />}/>
+          <Route path="/checkout"element={<Checkout
+                            cartItems={cartItems}
+                            cartTotal={cartTotal}
+                            showToast={showToast}
+                            setCartItems={setCartItems} />}/>
+          <Route
+  path="/order-success"
+  element={<OrderSuccess />}
+/>
+<Route
+  path="/my-orders"
+  element={<MyOrders />}
 />
 
 
@@ -371,8 +465,8 @@ function App() {
               <button
                 className="checkout-btn"
                 onClick={() => {
-                  showToast("Proceeding to checkout!");
                   setIsCartOpen(false);
+                  window.location.href = "/checkout";
                 }}
               >
                 Proceed to Checkout

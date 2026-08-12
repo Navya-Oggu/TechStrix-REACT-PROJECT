@@ -9,7 +9,7 @@ export default function SignUp({ showToast }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  function handleSubmit(event) {
+ async function handleSubmit(event) {
     event.preventDefault();
 
     if (!name) {
@@ -37,7 +37,36 @@ export default function SignUp({ showToast }) {
       return;
     }
 
-    showToast("Sign Up form is valid!");
+    
+  try {
+    const response = await fetch("http://localhost:8080/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+      }),
+    });
+
+    if (response.ok) {
+      showToast("Account created successfully!");
+
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    } else {
+      showToast("Unable to create account");
+    }
+
+  } catch (error) {
+    console.error(error);
+    showToast("Backend server is not running");
+  }
+
   }
 
   return (
@@ -104,5 +133,6 @@ export default function SignUp({ showToast }) {
     </div>
   );
 }
+
 
     
