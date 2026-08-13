@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
 
+// Simple inline placeholder (no missing-asset risk) shown when an order
+// item has no image, or its image URL fails to load.
+const FALLBACK_IMAGE =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">' +
+      '<rect width="64" height="64" fill="#eee"/>' +
+      '<text x="50%" y="50%" font-size="10" fill="#999" text-anchor="middle" dominant-baseline="middle">No image</text>' +
+      "</svg>"
+  );
+
 export default function MyOrders() {
 
   const [orders, setOrders] = useState([]);
@@ -85,7 +96,7 @@ export default function MyOrders() {
 
                   <p>
                     <strong>Name:</strong>{" "}
-                    {order.customerName}
+                    {order.name}
                   </p>
 
                   <p>
@@ -119,6 +130,16 @@ export default function MyOrders() {
                         className="ordered-item"
                         key={item.id}
                       >
+
+                        <img
+                          src={item.image || FALLBACK_IMAGE}
+                          alt={item.productName}
+                          className="ordered-item-img"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = FALLBACK_IMAGE;
+                          }}
+                        />
 
                         <div className="ordered-item-info">
 

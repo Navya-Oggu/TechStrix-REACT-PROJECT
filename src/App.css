@@ -2460,6 +2460,45 @@ body {
   font-size: 22px;
 }
 
+/* Ordered items (with product image) */
+
+.ordered-items {
+  padding: 18px 0;
+  border-top: 1px solid #eee;
+}
+
+.ordered-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+}
+
+.ordered-item-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.ordered-item-info {
+  flex: 1;
+}
+
+.ordered-item-info h4 {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.ordered-item-info p {
+  margin: 0;
+  font-size: 13px;
+  color: #777;
+}
+
 /* No orders */
 
 .no-orders {

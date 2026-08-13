@@ -1,6 +1,7 @@
 import ProductCard from "./ProductCard";
 import "./App.css";
 import { BrowserRouter, Routes, Route ,Link} from "react-router-dom";
+import Navbar from "./components/navbar/Navbar";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import OrderSuccess from "./pages/OrderSuccess";
@@ -222,116 +223,18 @@ async function uploadProducts() {
       )}
 
       {/* ── Navigation ────────────────────────────────── */}
-      <nav className="navbar">
-        <div className="nav-container">
-          <a href="/" className="logo">
-            <span className="logo-icon"></span>
-            ⚡TechStrix
-          </a>
-        
-
-          {/* Search Bar */}
-          <div className="nav-search">
-            <span className="search-icon">🔍</span>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search products, brands..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              id="nav-search-input"
-            />
-            {searchTerm && (
-              <button
-                className="search-clear"
-                onClick={() => setSearchTerm("")}
-                aria-label="Clear search"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-
-          <ul className="nav-links">
-            <li>
-              <Link to="/products" className="nav-link">
-                  Products
-              </Link>
-            </li>
-            
-           
-            <li>
-               {loggedInUser ? (
-    <div className="user-menu">
-      <span className="welcome-user">
-        Hi, {loggedInUser.name} 👋
-      </span>
-
-      <button
-        className="logout-btn"
-        onClick={handleLogout}
-      >
-        Logout
-      </button>
-    </div>
-  ) : (
-    <Link to="/Signin" className="nav-link">
-      Sign In
-    </Link>
-  )}
-            </li>
-            <li>
-  <Link to="/my-orders" className="nav-link">
-    My Orders
-  </Link>
-</li>
-          </ul>
-
-          <div className="nav-actions">
-            {/* Theme Toggle */}
-            <button
-              className="theme-toggle"
-              onClick={() => setDarkMode(!darkMode)}
-              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-              id="theme-toggle-btn"
-            >
-              <span className={`toggle-icon ${darkMode ? "moon" : "sun"}`}>
-                {darkMode ? "🌙" : "☀️"}
-              </span>
-            </button>
-            {/* Wishlist Badge */}
-            <button className="nav-icon-btn" id="wishlist-btn" aria-label="Wishlist">
-              <span className="nav-icon">♥</span>
-              {wishlist.length > 0 && (
-                <span className="badge wishlist-badge">{wishlist.length}</span>
-              )}
-            </button>
-
-            {/* Cart Badge + Total */}
-            <button
-              className="nav-icon-btn"
-              id="cart-btn"
-              aria-label="Cart"
-              onClick={() => setIsCartOpen(true)}
-            >
-              <span className="nav-icon">🛒</span>
-              {cartCount > 0 && (
-                <span className="badge cart-badge">{cartCount}</span>
-              )}
-            </button>
-
-            {cartTotal > 0 && (
-              <span className="cart-total" id="cart-total" onClick={() => setIsCartOpen(true)} style={{ cursor: 'pointer' }}>
-                ₹{cartTotal.toLocaleString("en-IN")}
-              </span>
-            )}
-
-            <Link to="/products" className="nav-btn primary">
-  Shop Now
-</Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        loggedInUser={loggedInUser}
+        handleLogout={handleLogout}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        wishlistCount={wishlist.length}
+        cartCount={cartCount}
+        cartTotal={cartTotal}
+        onOpenCart={() => setIsCartOpen(true)}
+      />
 
       <Routes>
 
@@ -481,3 +384,5 @@ async function uploadProducts() {
 }
 
 export default App;
+
+

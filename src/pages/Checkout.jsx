@@ -94,7 +94,8 @@ async function handleSubmit(e) {
         productId: item.id,
         productName: item.name,
         price: item.price,
-        quantity: item.quantity
+        quantity: item.quantity,
+        image: item.image
     }))
   };
   console.log("🚀 SENDING ORDER:", orderData);
